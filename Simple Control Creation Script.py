@@ -48,5 +48,22 @@ def group(sels=[]):
         n_sels.append(sel)
                 
     cmds.select(n_sels, r=True)
+    
+def constrain(sels=[]):
+    if not sels:
+        sels = cmds.ls(sl=True)
         
-control()
+    if len(sels) % 2 == 0: #is the length of the selection even?
+        ctrls = sels[0 : len(sels)/2]
+        jnts = sels[(len(sels)/2) : len(sels)]
+        
+        for i in range(len(ctrls)):
+            cmds.parentConstraint(ctrls[i], jnts[i], mo=True, weight=1)
+            
+        cmds.select(ctrls, r=True)
+        
+    else:
+        cmds.error("Must select an even number of objects.")
+        
+        
+constrain()
